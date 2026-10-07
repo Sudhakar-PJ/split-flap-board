@@ -9,7 +9,20 @@ export default function SplitFlapBoard() {
   const [isMuted, setIsMuted] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const characters = activeBoardText.toUpperCase().split("");
+  // Split input into words, then calculate cumulative character indices for proper stagger timing
+  const words = activeBoardText.toUpperCase().split(" ");
+  let globalCharCounter = 0;
+  const wordGroups = words.map((word) => {
+    const wordChars = word.split("").map((char) => ({
+      char,
+      staggerIndex: globalCharCounter++,
+    }));
+    // Add a trailing space stagger step between words
+    globalCharCounter++;
+    return wordChars;
+  });
+
+  const totalCharacters = activeBoardText.replace(/ /g, "").length;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     audioService.resumeAudioContext();
@@ -44,15 +57,10 @@ export default function SplitFlapBoard() {
   return (
     <div className="flex flex-col items-center gap-8 p-6 max-w-full">
       {/* Outer Solari Board Housing Frame */}
-      <div className="flex flex-col gap-4 rounded-2xl border-4 border-neutral-800 bg-[#0c0c0d] p-8 shadow-2xl transition-all duration-300 min-w-[340px]">
+      <div className="flex flex-col gap-4 rounded-2xl border-4 border-neutral-800 bg-[#0c0c0d] p-8 shadow-2xl transition-all duration-300 min-w-[340px] max-w-[95vw]">
         {/* Board Header Bar */}
         <div className="flex items-center justify-between border-b border-neutral-800 pb-3">
-          {/* <div className="flex items-center gap-2"> */}
           <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-          {/* <span className="font-mono text-xs font-semibold tracking-widest text-neutral-400 uppercase">
-              Solari Mechanical Display
-            </span> */}
-          {/* </div> */}
 
           <div className="flex items-center gap-3">
             {/* Top Right Audio Mute Button */}
@@ -74,7 +82,7 @@ export default function SplitFlapBoard() {
               )}
             </button>
 
-            {/* Top Right "X" Clear & Stop Button above "Sound On" */}
+            {/* Top Right "X" Clear & Stop Button */}
             <button
               onClick={handleClearBoard}
               className="flex items-center justify-center rounded-md border border-neutral-800 bg-neutral-900 p-1.5 text-neutral-400 transition hover:border-red-900 hover:bg-red-950 hover:text-red-300"
@@ -85,19 +93,26 @@ export default function SplitFlapBoard() {
           </div>
         </div>
 
-        {/* Flap Display Container */}
-        <div className="flex items-center gap-2 rounded-lg bg-[#141416] p-4 shadow-inner min-h-[124px] max-w-[90vw] overflow-x-auto justify-center">
-          {characters.length > 0 ? (
-            characters.map((char, index) => (
-              <AnimatedFlapCharacter
-                key={`${activeBoardText}-${index}`}
-                targetCharacter={char}
-                staggerIndex={index}
-                totalSlots={characters.length}
-              />
+        {/* Word-Group Wrapping Flap Display Container */}
+        <div className="flex flex-wrap items-center gap-x-6 gap-y-4 rounded-lg bg-[#141416] p-6 shadow-inner min-h-[124px] justify-start max-w-full">
+          {activeBoardText.trim().length > 0 ? (
+            wordGroups.map((wordChars, wordIndex) => (
+              <div
+                key={`${activeBoardText}-w${wordIndex}`}
+                className="flex items-center gap-2 flex-nowrap"
+              >
+                {wordChars.map(({ char, staggerIndex }, charIndex) => (
+                  <AnimatedFlapCharacter
+                    key={`${activeBoardText}-w${wordIndex}-c${charIndex}`}
+                    targetCharacter={char}
+                    staggerIndex={staggerIndex}
+                    totalSlots={totalCharacters}
+                  />
+                ))}
+              </div>
             ))
           ) : (
-            <div className="text-neutral-600 text-sm font-mono tracking-wider px-4">
+            <div className="w-full text-center text-neutral-600 text-sm font-mono tracking-wider px-4">
               PRESS ENTER TO DISPLAY...
             </div>
           )}
@@ -112,7 +127,7 @@ export default function SplitFlapBoard() {
           value={inputValue}
           onChange={handleInputChange}
           onKeyDown={handleKeyDown}
-          className="w-96 rounded-lg border border-neutral-700 bg-neutral-900 px-4 py-3 text-center font-mono text-xl text-neutral-100 placeholder-neutral-500 outline-none transition focus:border-neutral-500 focus:ring-1 focus:ring-neutral-500 shadow-lg"
+          className="w-96 max-w-[90vw] rounded-lg border border-neutral-700 bg-neutral-900 px-4 py-3 text-center font-mono text-xl text-neutral-100 placeholder-neutral-500 outline-none transition focus:border-neutral-500 focus:ring-1 focus:ring-neutral-500 shadow-lg"
           placeholder="Type text and press ENTER..."
         />
         <span className="text-xs text-neutral-500 font-mono">
