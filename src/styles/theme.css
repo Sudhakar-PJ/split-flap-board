@@ -1,0 +1,41 @@
+:root {
+  /* Board Environment */
+  --board-bg: #0c0c0d;
+  --board-frame: #242426;
+  --board-frame-inner: #141415;
+
+  /* Matte ABS Plastic / Vintage Bakelite Texture Tones */
+  --flap-bg-top-start: #1e1e20;
+  --flap-bg-top-end: #141416;
+  --flap-bg-bottom-start: #121214;
+  --flap-bg-bottom-end: #0a0a0b;
+  --flap-card-border: #2a2a2d;
+  --flap-bevel-light: rgba(255, 255, 255, 0.04);
+  --flap-bevel-dark: rgba(0, 0, 0, 0.9);
+
+  /* Hinge & Separator */
+  --hinge-line: #050505;
+  --hinge-shadow: rgba(0, 0, 0, 0.95);
+
+  /* Metallic Pivot Pins */
+  --pivot-pin-gradient: linear-gradient(
+    180deg,
+    #9a9a9e 0%,
+    #4a4a4e 45%,
+    #1e1e20 85%,
+    #4a4a4e 100%
+  );
+  --pivot-pin-shadow: rgba(0, 0, 0, 0.7);
+
+  /* Vintage Aged Off-White Character Typography */
+  --flap-text-color: #e2e0d8;
+  --flap-font-family: "Archivo Narrow", "IBM Plex Sans Condensed", sans-serif;
+
+  /* Subtle Matte Environmental Lighting (Zero Gloss reflection) */
+  --flap-top-highlight: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.02) 0%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  --flap-shadow-drop: 0 4px 12px rgba(0, 0, 0, 0.65);
+}

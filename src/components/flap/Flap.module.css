@@ -1,0 +1,235 @@
+/* Outer Frame Container */
+.outerFrame {
+  position: relative;
+  width: 70px;
+  height: 92px;
+  border-radius: 4px;
+  background-color: var(--board-frame-inner);
+  box-shadow: var(--flap-shadow-drop);
+  user-select: none;
+}
+
+/* 3D Perspective Context for GSAP 3D Flaps */
+.perspective {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  perspective: 900px;
+  perspective-origin: 50% 50%;
+  border-radius: 4px;
+}
+
+/* Top Flap Unit (Top 50%) */
+.topFlap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  overflow: hidden;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  transform-origin: 50% 100%;
+  backface-visibility: hidden;
+  z-index: 10;
+}
+
+.topFace {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      180deg,
+      var(--flap-bg-top-start) 0%,
+      var(--flap-bg-top-end) 100%
+    ),
+    url("/flap-texture.jpg") center/cover repeat;
+  background-blend-mode: multiply;
+  border-top: 1px solid var(--flap-card-border);
+  border-left: 1px solid var(--flap-card-border);
+  border-right: 1px solid var(--flap-card-border);
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  box-shadow:
+    inset 0 1px 0 var(--flap-bevel-light),
+    inset 1px 0 0 var(--flap-bevel-light),
+    inset 0 -1px 2px var(--flap-bevel-dark);
+}
+
+/* Bottom Flap Unit (Bottom 50%) */
+.bottomFlap {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  overflow: hidden;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+  transform-origin: 50% 0%;
+  backface-visibility: hidden;
+  z-index: 10;
+}
+
+.bottomFace {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      180deg,
+      var(--flap-bg-bottom-start) 0%,
+      var(--flap-bg-bottom-end) 100%
+    ),
+    url("/flap-texture.jpg") center/cover repeat;
+  background-blend-mode: multiply;
+  border-bottom: 1px solid var(--flap-card-border);
+  border-left: 1px solid var(--flap-card-border);
+  border-right: 1px solid var(--flap-card-border);
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+  box-shadow:
+    inset 0 1px 2px var(--flap-bevel-dark),
+    inset 1px 0 0 var(--flap-bevel-light),
+    inset 0 -1px 0 var(--flap-bevel-dark);
+}
+
+/* Dynamic Flipping Flap Unit (Active 3D Rotating Leaf owned by GSAP) */
+.flippingFlap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  overflow: hidden;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  transform-origin: 50% 100%;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  z-index: 20;
+}
+
+.flippingFace {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      180deg,
+      var(--flap-bg-top-start) 0%,
+      var(--flap-bg-top-end) 100%
+    ),
+    url("/flap-texture.jpg") center/cover repeat;
+  background-blend-mode: multiply;
+  border-top: 1px solid var(--flap-card-border);
+  border-left: 1px solid var(--flap-card-border);
+  border-right: 1px solid var(--flap-card-border);
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  box-shadow:
+    inset 0 1px 0 var(--flap-bevel-light),
+    inset 1px 0 0 var(--flap-bevel-light),
+    inset 0 -1px 2px var(--flap-bevel-dark);
+}
+
+/* 
+ * Character Viewport Alignment Solution:
+ * The viewport is sized to the FULL 92px height of the flap card (200% of the 50% half-flap container).
+ * Top viewport aligns to top: 0.
+ * Bottom viewport aligns to bottom: 0.
+ */
+.characterViewportTop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 92px; /* Full card height */
+  pointer-events: none;
+}
+
+.characterViewportBottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 92px; /* Full card height */
+  pointer-events: none;
+}
+
+.character {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--flap-font-family);
+  font-size: 66px;
+  font-weight: 700;
+  color: var(--flap-text-color);
+  line-height: 1;
+  text-align: center;
+  letter-spacing: -0.02em;
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Hairline Center Hinge Separator */
+.centerHinge {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  transform: translateY(-0.5px);
+  background-color: var(--hinge-line);
+  box-shadow: 0 1px 1px var(--hinge-shadow);
+  z-index: 30;
+  pointer-events: none;
+}
+
+/* Realistic Cylindrical Pivot Pins */
+.pivotPin {
+  position: absolute;
+  top: 50%;
+  width: 4px;
+  height: 10px;
+  transform: translateY(-50%);
+  background: var(--pivot-pin-gradient);
+  border-radius: 2px;
+  box-shadow: 0 1px 3px var(--pivot-pin-shadow);
+  z-index: 40;
+  pointer-events: none;
+}
+
+.leftPivot {
+  left: -2px;
+}
+
+.rightPivot {
+  right: -2px;
+}
+
+/* Dynamic Landing Shadow Overlay across bottom card */
+.shadowOverlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.8) 0%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  pointer-events: none;
+  opacity: 0;
+  z-index: 15;
+}
+
+/* Restrained Matte Environmental Overlay (No Gloss) */
+.lightingOverlay {
+  position: absolute;
+  inset: 0;
+  border-radius: 4px;
+  background: var(--flap-top-highlight);
+  pointer-events: none;
+  z-index: 25;
+}
